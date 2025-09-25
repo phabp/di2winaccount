@@ -26,9 +26,7 @@ A API é documentada com **Swagger (OpenAPI)**.
 - [📚 Exemplos de uso (endpoints & payloads)](#-exemplos-de-uso-endpoints--payloads)
 - [🔮 Expansões futuras](#-expansões-futuras)
 - [▶️ Como rodar o projeto (passo a passo)](#️-como-rodar-o-projeto-passo-a-passo)
-- [🐞 Problemas comuns (troubleshooting)](#-problemas-comuns-troubleshooting)
-- [📄 Licença](#-licença)
-- [🌐 Language](#-language)
+
 
 ---
 
