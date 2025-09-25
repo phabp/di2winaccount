@@ -12,6 +12,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 import java.util.UUID;
 
 @RestController
@@ -30,25 +34,34 @@ public class AuthController {
         this.encoder = encoder;
     }
 
-    /** Cadastro de usuário (CPF + senha). */
+    @Operation(description = "Register new user with CPF and password")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "User created"),
+        @ApiResponse(responseCode = "400", description = "Invalid data"),
+        @ApiResponse(responseCode = "409", description = "User already exists")
+    })
     @PostMapping("/register")
     public ResponseEntity<Void> register(@RequestBody @Valid RegisterUserDTO dto) {
-        userService.register(dto); // salva senha com BCrypt dentro do serviço
+        userService.register(dto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    /** Login: recebe CPF + senha e devolve um token simples (UUID) + cpf. */
+    @Operation(description = "Login with CPF and password")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Authenticated"),
+        @ApiResponse(responseCode = "401", description = "Invalid credentials")
+    })
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid LoginRequestDTO dto) {
-        final String cpf = dto.getCpf(); // já vem normalizado pelo setter
-        final String raw = dto.getPassword(); // já vem trimado
+        final String cpf = dto.getCpf();
+        final String raw = dto.getPassword();
 
         User u = userRepository.findByCpf(cpf).orElse(null);
         if (u == null || !u.isActive() || !encoder.matches(raw, u.getPasswordHash())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        String token = UUID.randomUUID().toString(); // token “temporário” p/ compatibilidade
+        String token = UUID.randomUUID().toString();
         return ResponseEntity.ok(new LoginResponseDTO(token, u.getCpf()));
     }
 }

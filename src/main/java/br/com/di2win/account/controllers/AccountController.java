@@ -15,6 +15,13 @@ import static org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,14 +38,20 @@ public class AccountController {
         this.operationService = operationService;
     }
 
-    /** Open a new account -> generates agency & number; also creates User with password */
+    @Operation(description = "Open a new account")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Account created")
+    })
     @PostMapping("/open")
     public ResponseEntity<AccountResponseDTO> open(@RequestBody @Valid OpenAccountRequestDTO dto) {
         AccountResponseDTO created = service.openAccount(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
-    /** Deposit */
+    @Operation(description = "Deposit into account")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "204", description = "Deposit successful")
+    })
     @PostMapping("/{number}/deposit")
     public ResponseEntity<Void> deposit(@PathVariable String number,
                                         @RequestBody @Valid OperationValueDTO dto) {
@@ -46,7 +59,10 @@ public class AccountController {
         return ResponseEntity.noContent().build();
     }
 
-    /** Withdraw */
+    @Operation(description = "Withdraw from account")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "204", description = "Withdraw successful")
+    })
     @PostMapping("/{number}/withdraw")
     public ResponseEntity<Void> withdraw(@PathVariable String number,
                                          @RequestBody @Valid OperationValueDTO dto) {
@@ -54,7 +70,10 @@ public class AccountController {
         return ResponseEntity.noContent().build();
     }
 
-    /** Transfer */
+    @Operation(description = "Transfer between accounts")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "204", description = "Transfer successful")
+    })
     @PostMapping("/{origin}/transfer")
     public ResponseEntity<Void> transfer(@PathVariable("origin") String originNumber,
                                          @RequestBody @Valid TransferDTO dto) {
@@ -62,14 +81,20 @@ public class AccountController {
         return ResponseEntity.noContent().build();
     }
 
-    /** Balance (returns only number + balance) */
+    @Operation(description = "Get balance")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Balance returned")
+    })
     @GetMapping("/{number}/balance")
     public ResponseEntity<BalanceResponseDTO> balance(@PathVariable String number) {
         BalanceResponseDTO bal = service.getBalance(number);
         return ResponseEntity.ok(bal);
     }
 
-    /** Block */
+    @Operation(description = "Block account")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Account blocked")
+    })
     @PostMapping("/{number}/block")
     public ResponseEntity<AccountResponseDTO> block(@PathVariable String number) {
         service.block(number);
@@ -77,7 +102,10 @@ public class AccountController {
         return ResponseEntity.ok(toResponse(acc));
     }
 
-    /** Unblock */
+    @Operation(description = "Unblock account")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Account unblocked")
+    })
     @PostMapping("/{number}/unblock")
     public ResponseEntity<AccountResponseDTO> unblock(@PathVariable String number) {
         service.unblock(number);
@@ -85,15 +113,20 @@ public class AccountController {
         return ResponseEntity.ok(toResponse(acc));
     }
 
-    /** List accounts by CPF (post-login menu) */
+    @Operation(description = "List accounts by CPF")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Accounts returned")
+    })
     @GetMapping("/by-cpf/{cpf}")
     public ResponseEntity<List<AccountResponseDTO>> byCpf(@PathVariable String cpf) {
         List<AccountResponseDTO> accounts = service.findByCpf(cpf);
         return ResponseEntity.ok(accounts);
     }
 
-    /** Extract by period (ascending order), returns OperationResponseDTO list */
-    // Example: GET /api/accounts/1234567890/extract?start=2025-09-24T00:00:00&end=2025-09-24T23:59:59
+    @Operation(description = "Extract by period")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Operations returned")
+    })
     @GetMapping("/{number}/extract")
     public List<OperationResponseDTO> extract(
             @PathVariable String number,
@@ -104,7 +137,6 @@ public class AccountController {
         return operationService.extractSimple(acc, start, end);
     }
 
-    // ---- mapper (entity -> DTO) usado em block/unblock
     private AccountResponseDTO toResponse(Account a) {
         return new AccountResponseDTO(
             a.getId(),

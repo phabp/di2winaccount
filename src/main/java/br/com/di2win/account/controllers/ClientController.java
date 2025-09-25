@@ -8,6 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 import java.util.List;
 
 @RestController
@@ -20,29 +24,46 @@ public class ClientController {
         this.service = service;
     }
 
-    // Create a new client
+    @Operation(description = "Create a new client")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Client created"),
+        @ApiResponse(responseCode = "400", description = "Invalid data"),
+        @ApiResponse(responseCode = "409", description = "Client already exists")
+    })
     @PostMapping
     public ResponseEntity<ClientResponseDTO> create(@RequestBody @Valid CreateClientDTO dto) {
         ClientResponseDTO created = service.create(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
-    // Delete a client by ID
+    @Operation(description = "Delete a client by ID")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "204", description = "Client deleted"),
+        @ApiResponse(responseCode = "404", description = "Client not found")
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
 
-    // Get a client by ID
+    @Operation(description = "Get a client by ID")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Client returned"),
+        @ApiResponse(responseCode = "404", description = "Client not found")
+    })
     @GetMapping("/{id}")
     public ResponseEntity<ClientResponseDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(service.getById(id));
     }
 
-    // List all clients
+    @Operation(description = "List all clients")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Clients returned")
+    })
     @GetMapping
     public ResponseEntity<List<ClientResponseDTO>> listAll() {
         return ResponseEntity.ok(service.listAll());
     }
 }
+
