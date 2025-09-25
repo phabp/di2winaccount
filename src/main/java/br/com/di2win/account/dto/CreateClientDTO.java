@@ -4,17 +4,22 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import org.hibernate.validator.constraints.br.CPF;
+import io.swagger.v3.oas.annotations.media.Schema;
 
+@Schema(name = "CreateClient", description = "Request payload to create a new client.")
 public class CreateClientDTO {
 
-    @NotBlank(message = "Name is required (mandatory)")
+    @Schema(description = "Full name of the client", example = "João Pedro da Silva")
+    @NotBlank(message = "Name is required ")
     private String name;
 
-    @NotBlank(message = "CPF is required (mandatory)")
-    @CPF(message = "This is a invalid cpf")
+    @Schema(description = " CPF (digits only)", example = "12345678909")
+    @NotBlank(message = "CPF is required")
+    @CPF(message = "This is an invalid CPF")
     private String cpf;
 
-    @NotNull(message = "Birth date is required (mandatory)")
+    @Schema(description = "Birth date in format YYYY-MM-DD)", example = "1995-08-17")
+    @NotNull(message = "Birth date is required ")
     private LocalDate birthDate;
 
     public String getName() { return name; }

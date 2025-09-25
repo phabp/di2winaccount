@@ -31,7 +31,7 @@ public class Account {
     private Boolean blocked = false;
 
     @Column(nullable = false)
-    private LocalDateTime openDate; // no default here; set at persist time
+    private LocalDateTime openDate; 
 
     @PrePersist
     protected void onCreate() {
@@ -40,7 +40,6 @@ public class Account {
         }
     }
 
-    // getters/setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

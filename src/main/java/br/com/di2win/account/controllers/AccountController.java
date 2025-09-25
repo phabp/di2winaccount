@@ -50,7 +50,7 @@ public class AccountController {
 
     @Operation(description = "Deposit into account")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "204", description = "Deposit successful")
+        @ApiResponse(responseCode = "204", description = "Deposit completed")
     })
     @PostMapping("/{number}/deposit")
     public ResponseEntity<Void> deposit(@PathVariable String number,
@@ -61,7 +61,7 @@ public class AccountController {
 
     @Operation(description = "Withdraw from account")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "204", description = "Withdraw successful")
+        @ApiResponse(responseCode = "204", description = "Withdraw completed")
     })
     @PostMapping("/{number}/withdraw")
     public ResponseEntity<Void> withdraw(@PathVariable String number,
@@ -72,7 +72,7 @@ public class AccountController {
 
     @Operation(description = "Transfer between accounts")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "204", description = "Transfer successful")
+        @ApiResponse(responseCode = "204", description = "Transfer completed")
     })
     @PostMapping("/{origin}/transfer")
     public ResponseEntity<Void> transfer(@PathVariable("origin") String originNumber,

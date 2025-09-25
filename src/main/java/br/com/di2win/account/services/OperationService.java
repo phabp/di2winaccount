@@ -21,20 +21,14 @@ public class OperationService {
         this.repo = repo;
     }
 
-    /** 
-     * Mantida por compatibilidade: usa o saldo atual da conta como balanceAfter
-     * e não define counterpartyNumber.
-     */
+    
     @Transactional
     public void register(Account account, OperationType type, BigDecimal value) {
-        // Neste ponto, espera-se que o Account já tenha o saldo atualizado.
+        
         register(account, type, value, account.getBalance(), null);
     }
 
-    /**
-     * Nova sobrecarga: permite informar explicitamente o saldo pós-operação
-     * e (opcionalmente) o número da contraparte em transferências.
-     */
+    
     @Transactional
     public void register(Account account,
                          OperationType type,
@@ -52,7 +46,7 @@ public class OperationService {
         repo.save(op);
     }
 
-    /** Extrato simples (lista completa) entre dois instantes, ordenado ASC por data. */
+    
     @Transactional(readOnly = true)
     public List<OperationResponseDTO> extractSimple(Account account,
                                                     LocalDateTime start,
@@ -63,7 +57,7 @@ public class OperationService {
                    .toList();
     }
 
-    /** Soma de saques num dia específico (00:00 até 23:59:59.999…). */
+   
     @Transactional(readOnly = true)
     public BigDecimal totalWithdrawnToday(Account account, LocalDate day) {
         LocalDateTime start = day.atStartOfDay();
@@ -72,7 +66,7 @@ public class OperationService {
         return (sum != null) ? sum : BigDecimal.ZERO;
     }
 
-    // ---- mapper
+    
     private OperationResponseDTO toDto(Operation op) {
         OperationResponseDTO dto = new OperationResponseDTO();
         dto.setId(op.getId());
@@ -81,7 +75,7 @@ public class OperationService {
         dto.setValue(op.getValue());
         dto.setOperationDate(op.getOperationDate());
         dto.setBalanceAfter(op.getBalanceAfter());
-        dto.setCounterpartyNumber(op.getCounterpartyNumber()); // <-- FALTAVA ESTA LINHA
+        dto.setCounterpartyNumber(op.getCounterpartyNumber()); 
         return dto;
     }
 }

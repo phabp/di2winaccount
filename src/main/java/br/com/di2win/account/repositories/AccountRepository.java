@@ -14,12 +14,12 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     boolean existsByNumber(String number);
 
-    // usado em regras de negócio (ex.: transferência por CPF)
+   
     Optional<Account> findFirstByClientCpfAndActiveTrueAndBlockedFalse(String cpf);
 
-    // usado no ClientService.delete(...) para listar contas do cliente
+  
     List<Account> findByClientId(Long clientId);
 
-    // NOVO: listar contas diretamente por CPF do cliente (para o menu pós-login)
+ 
     List<Account> findByClientCpf(String cpf);
 }

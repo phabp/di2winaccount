@@ -1,22 +1,37 @@
-
 package br.com.di2win.account.dto;
 
 import br.com.di2win.account.enums.OperationType;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+@Schema(name = "OperationResponse", description = "Represents a single ledger entry for an account operation.")
 public class OperationResponseDTO {
+
+    @Schema(description = "An unique identifier for the operation", example = "123")
     private Long id;
+
+    @Schema(description = "Account number related to the operation", example = "7647913839")
     private String accountNumber;
+
+    @Schema(description = "Type of the operation", example = "TRANSFER_MADE")
     private OperationType type;
+
+    @Schema(description = "Operation amount. ", example = "100.00")
     private BigDecimal value;
+
+    @Schema(description = "Operation date and time (format mandatory)", example = "2025-09-24T20:30:36.481484")
     private LocalDateTime operationDate;
-    private BigDecimal balanceAfter;       // saldo da conta após a operação
-    private String counterpartyNumber;     // conta de/para quem (em transferências)
+
+    @Schema(description = "Account balance after this operation", example = "81.00")
+    private BigDecimal balanceAfter;
+
+    @Schema(description = "Counterparty account number (origin or destination).", example = "7647913839")
+    private String counterpartyNumber;
 
     public OperationResponseDTO() {}
 
-    // Construtor existente (mantido para compatibilidade)
+    
     public OperationResponseDTO(Long id, String accountNumber, OperationType type,
                                 BigDecimal value, LocalDateTime operationDate,
                                 BigDecimal balanceAfter) {
@@ -28,7 +43,7 @@ public class OperationResponseDTO {
         this.balanceAfter = balanceAfter;
     }
 
-    // Novo construtor incluindo counterpartyNumber
+   
     public OperationResponseDTO(Long id, String accountNumber, OperationType type,
                                 BigDecimal value, LocalDateTime operationDate,
                                 BigDecimal balanceAfter, String counterpartyNumber) {
@@ -57,3 +72,4 @@ public class OperationResponseDTO {
     public String getCounterpartyNumber() { return counterpartyNumber; }
     public void setCounterpartyNumber(String counterpartyNumber) { this.counterpartyNumber = counterpartyNumber; }
 }
+

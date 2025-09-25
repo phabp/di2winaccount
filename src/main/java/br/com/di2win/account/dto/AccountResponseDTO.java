@@ -2,15 +2,33 @@ package br.com.di2win.account.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import io.swagger.v3.oas.annotations.media.Schema;
 
+@Schema(name = "AccountResponse", description = "Public representation of a bank account.")
 public class AccountResponseDTO {
+
+    @Schema(description = "Unique identifier for the account", example = "42", accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
+
+    @Schema(description = "Identifier of the client (owner of the account)", example = "101", accessMode = Schema.AccessMode.READ_ONLY)
     private Long clientId;
+
+    @Schema(description = "Account number", example = "7647913839")
     private String number;
+
+    @Schema(description = "agency code", example = "0001")
     private String agency;
+
+    @Schema(description = "Current balance", example = "1250.75", accessMode = Schema.AccessMode.READ_ONLY)
     private BigDecimal balance;
+
+    @Schema(description = "When the account is active", example = "true")
     private Boolean active;
+
+    @Schema(description = "When the account is temporarily blocked for operations", example = "false")
     private Boolean blocked;
+
+    @Schema(description = "Date and time when the account was opened", example = "2025-09-24T20:30:36.481484", accessMode = Schema.AccessMode.READ_ONLY)
     private LocalDateTime openDate;
 
     public AccountResponseDTO() {}

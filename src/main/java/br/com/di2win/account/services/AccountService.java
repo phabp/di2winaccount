@@ -48,7 +48,6 @@ public class AccountService {
         this.encoder = encoder;
     }
 
-    // =================== OPEN ACCOUNT (Client + User + Account) ===================
     @Transactional
     public AccountResponseDTO openAccount(OpenAccountRequestDTO dto) {
         final String cpf = normalizeCpf(dto.getCpf());
@@ -65,7 +64,7 @@ public class AccountService {
         });
 
         userRepo.findByCpf(cpf).ifPresent(u -> {
-            throw new ConflictException("User already exists for this CPF");
+            throw new ConflictException("User already exists with this CPF");
         });
         User user = new User();
         user.setCpf(cpf);
@@ -89,7 +88,6 @@ public class AccountService {
         return toAccountResponseDTO(acc);
     }
 
-    // =================== LIST/READ ===================
     @Transactional(readOnly = true)
     public List<AccountResponseDTO> findByCpf(String cpf) {
         String normCpf = normalizeCpf(cpf);
@@ -104,13 +102,13 @@ public class AccountService {
         return new BalanceResponseDTO(acc.getNumber(), acc.getBalance());
     }
 
-    /** Helper público para controllers pegarem a entidade (404 se não existir) */
+    
     @Transactional(readOnly = true)
     public Account getAccountEntityOr404(String number) {
         return findByNumberOr404Internal(number);
     }
 
-    // =================== BLOCK / UNBLOCK ===================
+    
     @Transactional
     public void block(String number) {
         Account acc = findByNumberOr404Internal(number);
@@ -125,7 +123,7 @@ public class AccountService {
         accountRepo.save(acc);
     }
 
-    // =================== OPERATIONS ===================
+   
     @Transactional
     public void deposit(String number, OperationValueDTO dto) {
         Account acc = findByNumberOr404Internal(number);
@@ -138,7 +136,7 @@ public class AccountService {
         acc.setBalance(acc.getBalance().add(dto.getValue()));
         accountRepo.save(acc);
 
-        // registra com saldo pós-operação e sem contraparte
+        
         operationService.register(acc, OperationType.DEPOSIT, dto.getValue(), acc.getBalance(), null);
     }
 
@@ -162,7 +160,7 @@ public class AccountService {
         acc.setBalance(acc.getBalance().subtract(dto.getValue()));
         accountRepo.save(acc);
 
-        // registra com saldo pós-operação e sem contraparte
+        
         operationService.register(acc, OperationType.WITHDRAW, dto.getValue(), acc.getBalance(), null);
     }
 
@@ -185,14 +183,14 @@ public class AccountService {
             throw new BusinessRuleException("Insufficient funds for transfer.");
         }
 
-        // Atualiza saldos
+       
         origin.setBalance(origin.getBalance().subtract(dto.getValue()));
         destination.setBalance(destination.getBalance().add(dto.getValue()));
         accountRepo.save(origin);
         accountRepo.save(destination);
-        accountRepo.flush(); // garante persistência antes dos registros
+        accountRepo.flush(); 
 
-        // Registra operações com saldo pós-operação e contraparte
+        
         operationService.register(
                 origin,
                 OperationType.TRANSFER_MADE,
@@ -210,7 +208,7 @@ public class AccountService {
         );
     }
 
-    // =================== HELPERS ===================
+    
     private Account findByNumberOr404Internal(String number) {
         return accountRepo.findByNumber(number)
                 .orElseThrow(() -> new NotFoundException("Account not found."));
@@ -238,7 +236,7 @@ public class AccountService {
         );
     }
 
-    // =================== NUMBER/AGENCY GENERATION (embutidos) ===================
+   
     private String generateAgency() {
         int n = RNG.nextInt(10_000);
         return String.format("%04d", n == 0 ? 1 : n);
@@ -262,7 +260,7 @@ public class AccountService {
         return number;
     }
 
-    // =================== NORMALIZATION & PASSWORD RULES ===================
+    
     private static String safeTrim(String s) {
         return s == null ? null : s.trim();
     }
@@ -276,7 +274,7 @@ public class AccountService {
             throw new BusinessRuleException("Password must have at least 6 characters");
         }
         if (!password.matches("^(?=.*[A-Za-z])(?=.*\\d).{6,}$")) {
-            throw new BusinessRuleException("Password must contain letters and numbers");
+            throw new BusinessRuleException("Password must contain letters AND numbers");
         }
     }
 }

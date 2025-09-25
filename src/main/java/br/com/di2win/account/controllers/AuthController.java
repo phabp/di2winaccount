@@ -38,7 +38,7 @@ public class AuthController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "User created"),
         @ApiResponse(responseCode = "400", description = "Invalid data"),
-        @ApiResponse(responseCode = "409", description = "User already exists")
+        @ApiResponse(responseCode = "409", description = "This user already exists")
     })
     @PostMapping("/register")
     public ResponseEntity<Void> register(@RequestBody @Valid RegisterUserDTO dto) {

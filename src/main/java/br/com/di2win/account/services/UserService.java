@@ -34,21 +34,21 @@ public class UserService {
             throw new ConflictException("A user with this CPF already exists.");
         }
 
-        // Link user to the Client that has the same CPF
+      
         Client client = clientRepo.findByCpf(normalizedCpf)
                 .orElseThrow(() -> new NotFoundException("Client not found for the given CPF. Create the client first."));
 
         User u = new User();
         u.setCpf(normalizedCpf);
-        u.setPasswordHash(encoder.encode(dto.getPassword())); // BCrypt
-        u.setRole("USER");   // if you store "ROLE_USER", switch SecurityConfig to .authorities(...)
+        u.setPasswordHash(encoder.encode(dto.getPassword())); 
+        u.setRole("USER");   
         u.setActive(true);
         u.setClient(client);
 
         userRepo.save(u);
     }
 
-    /** Remove any non-digit characters from CPF (e.g., dots/dashes). */
+    
     private String normalizeCpf(String cpf) {
         return cpf == null ? null : cpf.replaceAll("\\D", "");
     }

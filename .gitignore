@@ -4,17 +4,17 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-### STS ###
+### STS / Eclipse ###
 .apt_generated
 .classpath
 .factorypath
 .project
-.settings
+.settings/
 .springBeans
 .sts4-cache
 
 ### IntelliJ IDEA ###
-.idea
+.idea/
 *.iws
 *.iml
 *.ipr
@@ -31,3 +31,22 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### OS junk ###
+.DS_Store
+Thumbs.db
+
+### Logs / temp ###
+logs/
+*.log
+*.tmp
+hs_err_pid*
+replay_pid*
+
+### Local secrets / configs (DO NOT COMMIT) ###
+src/main/resources/application-local.properties
+src/main/resources/application-local.yml
+.env
+
+
+

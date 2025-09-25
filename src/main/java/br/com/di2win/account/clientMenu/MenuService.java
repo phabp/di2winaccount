@@ -40,7 +40,7 @@ public class MenuService {
         this.encoder = encoder;
     }
 
-    /** Ponto de entrada do menu. Chame este método no seu CommandLineRunner. */
+    
     public void start() {
 
         System.out.println(" WELCOME TO DI2WIN ACCOUNT, THE PLACE WHERE YOUR MONEY IS SAFE.");
@@ -72,8 +72,6 @@ public class MenuService {
         }
     }
 
-    // ========== FLOWS ==========
-
     private void doOpenAccountFlow() {
         System.out.println();
         System.out.println("[OPEN ACCOUNT FORM]");
@@ -91,10 +89,10 @@ public class MenuService {
 
             AccountResponseDTO acc = accountService.openAccount(dto);
             System.out.println();
-            System.out.println("Your account was successfully created! Welcome to the Di2Win family!");
+            System.out.println("Your account was successfully created! Welcome!");
             System.out.println("Take note of your account data --> Number account: " + acc.getNumber() + " , Agency: " + acc.getAgency());
 
-            // ir direto para o menu do usuário recém-criado
+            
             operationsMenu(cpf);
 
         } catch (ConflictException | BusinessRuleException e) {
@@ -107,8 +105,8 @@ public class MenuService {
     private void doLoginFlow() {
         System.out.println();
         System.out.println("[LOGIN ]");
-        String cpf = normalizeCpf(ask("CPF: "));
-        String password = ask("Password: ");
+        String cpf = normalizeCpf(ask("your CPF: "));
+        String password = ask("your password: ");
 
         try {
             User u = userRepo.findByCpf(cpf).orElse(null);
@@ -123,7 +121,7 @@ public class MenuService {
     }
 
     private void operationsMenu(String cpf) {
-        String activeAccount = determineActiveAccount(cpf); // auto-seleção
+        String activeAccount = determineActiveAccount(cpf); 
         if (activeAccount == null) return;
 
         boolean back = false;
@@ -146,7 +144,7 @@ public class MenuService {
             try {
                 switch (op) {
                     case "1":
-                        listAccounts(cpf); // “see my account”
+                        listAccounts(cpf); 
                         break;
                     case "2":
                         showBalance(activeAccount);
@@ -186,8 +184,6 @@ public class MenuService {
         }
     }
 
-    // ========== OPERATIONS ==========
-
     private void listAccounts(String cpf) {
         List<AccountResponseDTO> list = accountService.findByCpf(cpf);
         if (list.isEmpty()) {
@@ -205,7 +201,7 @@ public class MenuService {
         }
     }
 
-    /** Nova lógica: escolhe automaticamente a conta ativa. */
+
     private String determineActiveAccount(String cpf) {
         List<AccountResponseDTO> list = accountService.findByCpf(cpf);
 
@@ -233,7 +229,7 @@ public class MenuService {
         OperationValueDTO dto = new OperationValueDTO();
         dto.setValue(value);
         accountService.deposit(number, dto);
-        System.out.println("Deposit done with success.");
+        System.out.println("Deposit completed.");
         showBalance(number);
     }
 
@@ -242,7 +238,7 @@ public class MenuService {
         OperationValueDTO dto = new OperationValueDTO();
         dto.setValue(value);
         accountService.withdraw(number, dto);
-        System.out.println("Withdraw done with success!");
+        System.out.println("Withdraw completed!");
         showBalance(number);
     }
 
@@ -253,15 +249,15 @@ public class MenuService {
         dto.setDestinationNumber(dest);
         dto.setValue(value);
         accountService.transfer(originNumber, dto);
-        System.out.println("Transfer done with success.");
+        System.out.println("Transfer completed.");
         showBalance(originNumber);
     }
 
     private void extract(String number) {
         System.out.println();
         System.out.println("[ACCOUNT STATEMENT]");
-        LocalDateTime start = askDateTime("Start (YYYY-MM-DDTHH:MM:SS):");
-        LocalDateTime end   = askDateTime("End   (YYYY-MM-DDTHH:MM:SS):");
+        LocalDateTime start = askDateTime("Start date and time: (YYYY-MM-DDTHH:MM:SS):");
+        LocalDateTime end   = askDateTime("End date and time:  (YYYY-MM-DDTHH:MM:SS):");
 
         Account acc = accountService.getAccountEntityOr404(number);
         var list = operationService.extractSimple(acc, start, end);
@@ -270,7 +266,7 @@ public class MenuService {
             return;
         }
 
-        // Cabeçalho + impressão de counterparty e balanceAfter
+        
         System.out.println();
         System.out.println("Date/Time                | Type               | Value      | Counterparty     | Balance After");
         System.out.println("-------------------------+--------------------+------------+------------------+--------------");
@@ -285,7 +281,7 @@ public class MenuService {
         });
     }
 
-    // ========== INPUT HELPERS ==========
+
 
     private String ask(String prompt) {
         System.out.print(prompt);

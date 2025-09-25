@@ -30,12 +30,11 @@ public class Operation {
     @Column(name = "operation_date", nullable = false)
     private LocalDateTime operationDate;
 
-    // NOVOS CAMPOS
-    /** Saldo da conta imediatamente após a operação */
+        
     @Column(name = "balance_after", precision = 18, scale = 2)
     private BigDecimal balanceAfter;
 
-    /** Número da conta contraparte (em transferências); null para depósito/saque */
+    
     @Column(name = "counterparty_number", length = 20)
     private String counterpartyNumber;
 
@@ -46,7 +45,7 @@ public class Operation {
         }
     }
 
-    // getters/setters
+    
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

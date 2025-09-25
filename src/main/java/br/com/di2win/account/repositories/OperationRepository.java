@@ -16,7 +16,7 @@ import java.util.List;
 @Repository
 public interface OperationRepository extends JpaRepository<Operation, Long> {
 
-    /** Extrato paginado (ordenado DESC por data) para statement detalhado */
+    
     @Query("""
       select o
       from Operation o
@@ -31,7 +31,7 @@ public interface OperationRepository extends JpaRepository<Operation, Long> {
         Pageable pageable
     );
 
-    /** Soma de um tipo (ex.: WITHDRAW) no período informado */
+    
     @Query("""
       select coalesce(sum(o.value), 0)
       from Operation o
@@ -46,7 +46,7 @@ public interface OperationRepository extends JpaRepository<Operation, Long> {
         @Param("end") LocalDateTime end
     );
 
-    /** Extrato simples entre instantes, ordenado ASC (para o menu) */
+   
     List<Operation> findByAccountAndOperationDateBetweenOrderByOperationDateAsc(
         Account account,
         LocalDateTime start,

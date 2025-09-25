@@ -34,7 +34,7 @@ public class ClientService {
         Client c = new Client();
         c.setName(dto.getName());
         c.setCpf(dto.getCpf());
-        c.setBirthDate(dto.getBirthDate()); // <<< adiciona a data de nascimento
+        c.setBirthDate(dto.getBirthDate()); 
 
         Client saved = clientRepository.save(c);
         return toResponse(saved);
@@ -71,7 +71,7 @@ public class ClientService {
                 c.getId(),
                 c.getName(),
                 c.getCpf(),
-                c.getBirthDate() // <<< retorna a birthDate no DTO
+                c.getBirthDate() 
         );
     }
 }
