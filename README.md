@@ -155,8 +155,9 @@ Tipos: `DEPOSIT`, `WITHDRAWAL`, `TRANSFER_MADE`, `TRANSFER_RECEIVED`.
 
 ### Clonar repositório
 ```bash
-git clone https://github.com/<usuario>/<di2win-account>.git
-cd di2win-account
+git clone https://github.com/phabp/di2winaccount.git
+cd di2winaccount
+
 ```
 
 ### Criar banco no Postgre 
