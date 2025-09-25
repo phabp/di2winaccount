@@ -160,7 +160,8 @@ cd di2winaccount
 
 ```
 
-### Criar banco no Postgre 
+### Criar banco no Postgre : 
+
 CREATE DATABASE di2winaccount_database ENCODING 'UTF8';
 CREATE USER di2win WITH ENCRYPTED PASSWORD 'sua_senha';
 GRANT ALL PRIVILEGES ON DATABASE di2winaccount_database TO di2win;
