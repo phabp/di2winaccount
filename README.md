@@ -162,18 +162,23 @@ cd di2winaccount
 
 ### Criar banco no Postgre : 
 
+### Criar banco no PostgreSQL
+```sql
 CREATE DATABASE di2winaccount_database ENCODING 'UTF8';
 CREATE USER di2win WITH ENCRYPTED PASSWORD 'sua_senha';
 GRANT ALL PRIVILEGES ON DATABASE di2winaccount_database TO di2win;
 
+``` 
 
 ### Configurar application.properties (arquivo em: main/resources) :
 
-spring.datasource.url=jdbc:postgresql://localhost:5432/di2winaccount_database
+sspring.datasource.url=jdbc:postgresql://localhost:5432/di2winaccount_database
 spring.datasource.username=postgres
 spring.datasource.password=SUA_SENHA
+
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
+
 springdoc.swagger-ui.enabled=true
 
 ### Rodar o projeto em uma IDE:
