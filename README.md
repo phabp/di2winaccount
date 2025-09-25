@@ -82,12 +82,27 @@ A API é documentada com **Swagger (OpenAPI)**.
 
 ## 🏗️ Arquitetura (MVC em camadas)
 
-- **Model:** entidades (`Client`, `User`, `Account`, `Operation`) + repositórios.  
-- **View:** DTOs (JSON) + Swagger UI.  
-- **Controller:** endpoints REST (`/api/clients`, `/api/accounts`, `/api/operations`).  
-- **Service:** centralização das regras de negócio.
+- **Controller** → camada que expõe os **endpoints REST**, recebe as requisições HTTP e delega para os Services.  
+- **DTO (Data Transfer Object)** → objetos simples usados para **transportar dados** entre as camadas, evitando expor diretamente as entidades do domínio.  
+- **Entity (Entidade)** → classes que representam as **tabelas do banco de dados**, mapeadas com JPA/Hibernate.  
+- **Repository** → interfaces do Spring Data JPA que fazem o **acesso ao banco de dados**, com métodos prontos ou consultas personalizadas.  
+- **Service** → camada que concentra as **regras de negócio** e orquestra as operações entre Controllers, Repositories e demais componentes.  
+- **Exception/Handler** → classes usadas para **padronizar os erros** da aplicação e melhorar a resposta para o cliente.  
+
 
 ---
+
+## 📖 Documentação disponível
+
+1. **README.md (este arquivo)**  
+   - Explica detalhadamente o sistema, suas funcionalidades, regras de negócio, arquitetura, tecnologias e como rodar o projeto.  
+   - Serve como guia principal para desenvolvedores ou avaliadores entenderem rapidamente o funcionamento da aplicação.  
+
+2. **Swagger UI (OpenAPI)**  
+   - Disponível em: `http://localhost:8080/swagger-ui/index.html` (ou na porta configurada em `application.properties`).  
+   - Fornece documentação interativa dos **endpoints REST**: é possível visualizar as rotas, os métodos HTTP, os parâmetros de entrada e os modelos de resposta.  
+   - Foram utilizadas anotações como `@Operation` e `@Schema(description = "...")` para enriquecer a descrição dos endpoints e DTOs, ajudando quem for testar a API a entender melhor cada campo e operação.  
+
 
 
 ---
